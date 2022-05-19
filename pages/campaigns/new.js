@@ -1,27 +1,38 @@
 import react from "react";
 import Layout from "../../components/Layout";
-import { Form, Button, Checkbox, Input } from "semantic-ui-react";
+import { Form, Button, Checkbox, Input, Message } from "semantic-ui-react";
 import { useState } from "react";
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
 
 function CampaignNew() {
   const [minContribution, setMinContribution] = useState("");
+  const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(event);
-
-    await factory.methods.createCampaign(minContribution).send({
-      from: accounts[0],
-    });
+    setLoading(true);
+    setErr("");
+    try {
+      console.log(event);
+      const accounts = await web3.eth.getAccounts();
+      console.log(accounts);
+      await factory.methods.createCampaign(minContribution).send({
+        from: accounts[0],
+      });
+    } catch (err) {
+      console.log("Error", err);
+      setErr(err);
+    }
+    setLoading(false);
   };
 
   return (
     <Layout>
       <div>
         <h3>Create A New Campaign !</h3>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} error={!!err}>
           <Form.Field>
             <label>Minimum Contribution</label>
             <Input
@@ -35,7 +46,8 @@ function CampaignNew() {
           <Form.Field>
             <Checkbox label="I agree to the Terms and Conditions" />
           </Form.Field>
-          <Button primary type="submit">
+          <Message error header="Oops !" content={err.message} />
+          <Button loading={loading} primary type="submit">
             Create !
           </Button>
         </Form>
