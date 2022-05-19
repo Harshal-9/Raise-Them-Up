@@ -4,6 +4,7 @@ import { Form, Button, Checkbox, Input, Message } from "semantic-ui-react";
 import { useState } from "react";
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
+import { Link, Router } from "../../routes";
 
 function CampaignNew() {
   const [minContribution, setMinContribution] = useState("");
@@ -21,6 +22,8 @@ function CampaignNew() {
       await factory.methods.createCampaign(minContribution).send({
         from: accounts[0],
       });
+
+      Router.pushRoute("/");
     } catch (err) {
       console.log("Error", err);
       setErr(err);
