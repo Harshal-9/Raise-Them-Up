@@ -5,6 +5,8 @@ import fetchCampaignFromAddress from "../../ethereum/Campaign";
 import web3 from "../../ethereum/web3";
 import ContributeForm from "../../components/ContributeForm";
 import { Link } from "../../routes";
+import Campaign from "../../ethereum/Campaign";
+import ToastContainer from "react-toastify";
 
 function CampaignShow(props) {
   function CampaignCards() {
@@ -14,16 +16,26 @@ function CampaignShow(props) {
       minimumContribution,
       requestsCount,
       approversCount,
+      name,
+      description,
+      campaignName,
     } = props;
 
     const items = [
       {
-        header: manager,
-        meta: "Address of Manager",
+        header: campaignName,
+        meta: "Description of Campaign",
+        description: description,
+        style: { overflowWrap: "break-word" },
+      },
+      {
+        header: name,
+        meta: "Name of Manager\n" + manager,
         description:
           "The manager created this campaign and can request to withdraw money",
         style: { overflowWrap: "break-word" },
       },
+
       {
         header: minimumContribution,
         meta: "Minimum Contribution",
@@ -69,6 +81,7 @@ function CampaignShow(props) {
           </Grid.Column>
           <Grid.Row>
             <Grid.Column>
+              <br />
               <Link route={`/campaigns/${props.address}/requests`}>
                 <a>
                   <Button primary>View Requests</Button>
@@ -88,14 +101,25 @@ CampaignShow.getInitialProps = async (props) => {
   const fetchedCampaign = fetchCampaignFromAddress(props.query.address);
   console.log(fetchedCampaign);
   const summary = await fetchedCampaign.methods.getSummary().call();
+  let name = await Campaign(props.query.address).methods.managerName().call();
+  let campaignName = await Campaign(props.query.address)
+    .methods.campaignName()
+    .call();
+  let description = await Campaign(props.query.address)
+    .methods.campaignDescription()
+    .call();
+  console.log("Nm", name);
   console.log("Summary", summary);
   return {
+    name: name,
     address: props.query.address,
     minimumContribution: summary[0],
     balance: summary[1],
     requestsCount: summary[2],
     approversCount: summary[3],
     manager: summary[4],
+    description: description,
+    campaignName: campaignName,
   };
 };
 

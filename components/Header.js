@@ -2,7 +2,7 @@ import { Menu } from "semantic-ui-react";
 import { Link } from "../routes";
 function Header() {
   return (
-    <Menu style={{ marginTop: "15px" }}>
+    <Menu style={{ marginTop: "15px", fontFamily: "verdana" }}>
       <Link route="/">
         <a className="item">Raise Them Up</a>
       </Link>

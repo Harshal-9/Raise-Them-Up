@@ -4,7 +4,7 @@ import Header from "./Header";
 import Head from "next/head";
 function Layout(props) {
   return (
-    <Container>
+    <Container style={{ fontFamily: "verdana" }}>
       <Head>
         <link
           async

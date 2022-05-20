@@ -3,16 +3,21 @@ import { Card, Button } from "semantic-ui-react";
 import factory from "../ethereum/factory";
 import Layout from "../components/Layout";
 import { Link } from "../routes";
+import Campaign from "../ethereum/Campaign";
 
 function CampaignIndex(props) {
   function CampaignCard() {
-    const items = props.campaigns.map((address) => {
+    const items = props.campaigns.map(({ address, name }) => {
+      console.log("Ad ", address, name);
       return {
-        header: address,
+        header: name,
         description: (
-          <Link route={`/campaigns/${address}`}>
-            <a>View Campaign</a>
-          </Link>
+          <>
+            <p>{address}</p>
+            <Link route={`/campaigns/${address}`}>
+              <a>View Campaign</a>
+            </Link>
+          </>
         ),
         fluid: true,
       };
@@ -43,7 +48,25 @@ function CampaignIndex(props) {
 CampaignIndex.getInitialProps = async () => {
   const campaigns = await factory.methods.getDeployedCampaigns().call();
   console.log(campaigns);
-  return { campaigns };
+
+  let campaignDetails = [];
+
+  async function getNames() {
+    for (let campAddress of campaigns) {
+      console.log("x", campAddress);
+      const requestCount = await Campaign(campAddress)
+        .methods.getRequestsCount()
+        .call();
+      console.log(requestCount);
+      let name = await Campaign(campAddress).methods.campaignName().call();
+      console.log(name);
+      campaignDetails.push({ name: name, address: campAddress });
+    }
+  }
+  await getNames();
+  console.log("Names", campaignDetails);
+
+  return { campaigns: campaignDetails };
 };
 
 export default CampaignIndex;

@@ -3,6 +3,7 @@ import { Button, Form, Input, Message } from "semantic-ui-react";
 import Campaign from "../ethereum/Campaign";
 import web3 from "../ethereum/web3";
 import { Router } from "../routes";
+import UpdateSuccessToast from "../components/AllToasts";
 
 function ContributeForm(props) {
   const [amount, setAmount] = useState("");
@@ -21,8 +22,11 @@ function ContributeForm(props) {
         from: accounts[0],
         value: web3.utils.toWei(amount, "ether"),
       });
-
+      alert("Thanks for your contribution !");
+      // UpdateSuccessToast("Thanks for your contribution !");
+      // setTimeout(() => {
       Router.replaceRoute(`/campaigns/${props.address}`);
+      // }, 2000);
     } catch (err) {
       console.log("MyError", err);
       setErr(err.message);
