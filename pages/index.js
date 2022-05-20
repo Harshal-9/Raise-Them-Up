@@ -28,7 +28,17 @@ function CampaignIndex(props) {
   return (
     <Layout>
       <div>
-        <h3>Open Campaigns</h3>
+        <br />
+        <h2 style={{ fontFamily: "cursive", color: "red" }}>
+          <i>
+            <q>
+              A small contribution you make today will shape a better future of
+              someone for tomorrow
+            </q>
+          </i>
+        </h2>
+        <h3>Contribute in Campaigns</h3>
+        <br />
         <Link route="/campaigns/new">
           <a>
             <Button
