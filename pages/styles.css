@@ -1,7 +1,8 @@
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-align: center;
-  background-image: url("https://img.wallpapersafari.com/desktop/1366/768/83/26/TVC4pE.jpeg");
+  /* background-image: url("https://img.wallpapersafari.com/desktop/1366/768/83/26/TVC4pE.jpeg"); */
+  background-image: url("../assets/background.jpeg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100% 100%;
